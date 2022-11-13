@@ -21,8 +21,9 @@ create table producto (
 
 create table carrito_producto (
     id_carrito int references carrito(id_carrito),
-    id_product int references producto(id_product)
-);
+    id_product int references producto(id_product),
+	product_amount int
+); 
 
 create table venta (
     id_venta serial primary key,
@@ -36,13 +37,22 @@ create table carrito_venta (
 );
 
 
---------inserts test-------------------------
+-------------inserts--------------
 insert into cliente(rut,user_name,pswd,amount,admin_Flag)
-	values
-	('rutAdmin1','ADMIN1','NegocioJuanita',NULL,TRUE),
-	('rut1','user1','contra1',0,FALSE),
-	('rut3','user3','contra2',0,FALSE)
+values
+('rutAdmin1','ADMIN','NegocioJuanita',NULL,TRUE),
+('rut1','user1','contra1',0,FALSE),
+('rut2','user2','contra2',0,FALSE),
+('rut3','user3','contra3',0,FALSE)
 
-select * from cliente
+insert into carrito(id_user,total_price)
+values
+(2,0),
+(3,0),
+(4,0)
 
-
+insert into producto(product_name,cost,stock)
+values
+('product1',1000,100),
+('product2',2000,200),
+('product3',3000,300)
