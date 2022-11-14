@@ -110,7 +110,7 @@ def menuCliente(usuario):
                 print("Contrasena editada correctamente")
                 while True:
                     try:
-                        opcion = int(input("si quiere salir del menu presione 0 cualquier otra tecla para volver al menu: "))
+                        opcion = int(input("si quiere salir del menu presione 0 cualquier otra numero para volver al menu: "))
                         if opcion == 0:
                             exit()
                         else:
@@ -122,7 +122,7 @@ def menuCliente(usuario):
                 ingresarProductoACarrito(usuario)
                 while True:
                     try:
-                        opcion = int(input("si quiere salir del menu presione 0 cualquier otra tecla para volver al menu: "))
+                        opcion = int(input("si quiere salir del menu presione 0 cualquier otra numero para volver al menu: "))
                         if opcion == 0:
                             exit()
                         else:
@@ -134,7 +134,7 @@ def menuCliente(usuario):
                 verSaldo(usuario)
                 while True:
                     try:
-                        opcion = int(input("si quiere salir del menu presione 0 cualquier otra tecla para volver al menu: "))
+                        opcion = int(input("si quiere salir del menu presione 0 cualquier otra numero para volver al menu: "))
                         if opcion == 0:
                             exit()
                         else:
@@ -146,7 +146,7 @@ def menuCliente(usuario):
                 recargarSaldo(usuario)
                 while True:
                     try:
-                        opcion = int(input("si quiere salir del menu presione 0 cualquier otra tecla para volver al menu: "))
+                        opcion = int(input("si quiere salir del menu presione 0 cualquier otra numero para volver al menu: "))
                         if opcion == 0:
                             exit()
                         else:
@@ -156,10 +156,28 @@ def menuCliente(usuario):
                 menuCliente(usuario)
             case 5:
                 verCarrito(usuario)
-                break
+                while True:
+                    try:
+                        opcion = int(input("si quiere salir del menu presione 0 cualquier otra numero para volver al menu: "))
+                        if opcion == 0:
+                            exit()
+                        else:
+                            break
+                    except (Exception, Error) as e:
+                        print(e)
+                menuCliente(usuario)
             case 6:
                 eliminarProductoDeCarrito(usuario)
-                break
+                while True:
+                    try:
+                        opcion = int(input("si quiere salir del menu presione 0 cualquier otra numero para volver al menu: "))
+                        if opcion == 0:
+                            exit()
+                        else:
+                            break
+                    except (Exception, Error) as e:
+                        print(e)
+                menuCliente(usuario)
             case 7:
                 pagarCarrito(usuario)
                 break
@@ -205,74 +223,74 @@ def cambiarPass(usuario):
         except (Exception,Error) as e:
             print("No es la misma contrasena, pruebe nuevamente")
 
-def ingresarProductoACarrito(usuario):  
-    try:
-        queryIdCliente = "select id_user from cliente where user_name = %s"
-        idCliente, = select_query(queryIdCliente,[usuario])[0]
+def ingresarProductoACarrito(usuario):
+    while True:
+        try:
+            queryIdCliente = "select id_user from cliente where user_name = %s"
+            idCliente, = select_query(queryIdCliente,[usuario])[0]
 
-        productoAIngresar = input("Ingrese el nombre del producto que quiere agregar al carrito: ")
-        queryNombreProducto = "select product_name from producto where product_name = %s"
-        nombreProducto, = select_query(queryNombreProducto,[productoAIngresar])[0]
+            productoAIngresar = input("Ingrese el nombre del producto que quiere agregar al carrito: ")
+            queryNombreProducto = "select product_name from producto where product_name = %s"
+            nombreProducto, = select_query(queryNombreProducto,[productoAIngresar])[0]
 
-        queryProductoId = "select id_product from producto where product_name = %s"
-        queryProductoStock = "select stock from producto where product_name = %s"
-        queryProductoCost = "select cost from producto where product_name = %s"
-        idProducto, = select_query(queryProductoId,[productoAIngresar])[0]
-        stockProducto, = select_query(queryProductoStock,[productoAIngresar])[0]
-        precioProducto, = select_query(queryProductoCost,[productoAIngresar])[0]
+            queryProductoId = "select id_product from producto where product_name = %s"
+            queryProductoStock = "select stock from producto where product_name = %s"
+            queryProductoCost = "select cost from producto where product_name = %s"
+            idProducto, = select_query(queryProductoId,[productoAIngresar])[0]
+            stockProducto, = select_query(queryProductoStock,[productoAIngresar])[0]
+            precioProducto, = select_query(queryProductoCost,[productoAIngresar])[0]
 
-        print(idProducto,"id del producto a agregar")
-        print(stockProducto, "stock del producto a agregar")
-        print(precioProducto, "precio del producto a agregar")
+            print(stockProducto, "stock del producto a agregar")
+            print(precioProducto, "precio del producto a agregar")
 
-        if nombreProducto == productoAIngresar:
+            if nombreProducto == productoAIngresar:
 
-            while True:
-                stockASumar = int(input("Ingrese la cantidad de producto que quiere ingresar al carrito: "))
+                while True:
+                    stockASumar = int(input("Ingrese la cantidad de producto que quiere ingresar al carrito: "))
 
-                if stockASumar > 0 and (stockProducto - stockASumar) >= 0:
-                    queryIdCarrito = "select id_carrito from carrito where carrito.id_user = %s"
-                    idCarrito, = select_query(queryIdCarrito,[idCliente])[0]
+                    if stockASumar > 0 and (stockProducto - stockASumar) >= 0:
+                        queryIdCarrito = "select id_carrito from carrito where carrito.id_user = %s"
+                        idCarrito, = select_query(queryIdCarrito,[idCliente])[0]
 
-                    #checkear antes que si existe o no la fila de carrito_producto
-                    queryExisteCarrito_producto = "select exists(select 1 from carrito_producto where carrito_producto.id_carrito = %s and carrito_producto.id_product = %s)"
-                    dataCarrito_producto, = select_query(queryExisteCarrito_producto,[idCarrito,idProducto])[0]
+                        #checkear antes que si existe o no la fila de carrito_producto
+                        queryExisteCarrito_producto = "select exists(select 1 from carrito_producto where carrito_producto.id_carrito = %s and carrito_producto.id_product = %s)"
+                        dataCarrito_producto, = select_query(queryExisteCarrito_producto,[idCarrito,idProducto])[0]
 
-                    if not dataCarrito_producto: #si no existe la fila insertar nueva
-                        queryInsertarEnCarrito_producto = "insert into carrito_producto values(%s,%s,%s)"
-                        insert_query(queryInsertarEnCarrito_producto,(idCarrito,idProducto,stockASumar))
+                        if not dataCarrito_producto: #si no existe la fila insertar nueva
+                            queryInsertarEnCarrito_producto = "insert into carrito_producto values(%s,%s,%s)"
+                            insert_query(queryInsertarEnCarrito_producto,(idCarrito,idProducto,stockASumar))
 
-                        queryRestarStockProducto = "update producto set stock = stock-%s where id_product = %s"
-                        filaActualizada = update_query(queryRestarStockProducto,(stockASumar,idProducto))
-                        print(f"{filaActualizada} stock de producto actualizado")
+                            queryRestarStockProducto = "update producto set stock = stock-%s where id_product = %s"
+                            filaActualizada = update_query(queryRestarStockProducto,(stockASumar,idProducto))
+                            print(f"{filaActualizada} stock de producto actualizado")
 
-                        querySumarTotalCarrito = "update carrito set total_price = total_price+%s*%s where id_carrito = %s"
-                        print((str) (update_query(querySumarTotalCarrito,(precioProducto,stockASumar,idCarrito))) + " filas actualizadas")
+                            querySumarTotalCarrito = "update carrito set total_price = total_price+%s*%s where id_carrito = %s"
+                            print((str) (update_query(querySumarTotalCarrito,(precioProducto,stockASumar,idCarrito))) + " filas actualizadas")
 
-                        print("Producto agregado correctamente")
+                            print("Producto agregado correctamente")
 
-                        break
+                            break
 
-                    else: #si ya existia la fila actualizarla
-                        queryUpdateCarrito_producto = "update carrito_producto set product_amount = product_amount+%s where id_carrito = %s and id_product = %s"
-                        filasEditadasCarrito_producto = update_query(queryUpdateCarrito_producto,(stockASumar,idCarrito,idProducto))
-                        print(f"{filasEditadasCarrito_producto} fila(s) editada(s)")
+                        else: #si ya existia la fila actualizarla
+                            queryUpdateCarrito_producto = "update carrito_producto set product_amount = product_amount+%s where id_carrito = %s and id_product = %s"
+                            filasEditadasCarrito_producto = update_query(queryUpdateCarrito_producto,(stockASumar,idCarrito,idProducto))
+                            print(f"{filasEditadasCarrito_producto} fila(s) editada(s)")
 
-                        queryRestarStockProducto = "update producto set stock = stock-%s where id_product = %s"
-                        print((str) (update_query(queryRestarStockProducto,(stockASumar,idProducto))) + " filas editadas")
+                            queryRestarStockProducto = "update producto set stock = stock-%s where id_product = %s"
+                            print((str) (update_query(queryRestarStockProducto,(stockASumar,idProducto))) + " filas editadas")
 
-                        querySumarTotalCarrito = "update carrito set total_price = total_price+%s*%s where id_carrito = %s"
-                        print((str) (update_query(querySumarTotalCarrito,(precioProducto,stockASumar,idCarrito))) + " filas actualizadas")
+                            querySumarTotalCarrito = "update carrito set total_price = total_price+%s*%s where id_carrito = %s"
+                            print((str) (update_query(querySumarTotalCarrito,(precioProducto,stockASumar,idCarrito))) + " filas actualizadas")
 
-                        print("Producto agregado correctamente")
-
-                        break
-                else:
-                    print("Ingrese un numero positivo de stock o no hay suficiente stock")
-        else:
-            print("No existe producto con ese nombre, ingrese nuevamente")
-    except (Exception,Error) as e:
-        print(e)
+                            print("Producto agregado correctamente")
+                            break 
+                    else:
+                        print("Ingrese un numero positivo de stock o no hay suficiente stock")
+            else:
+                print("No existe producto con ese nombre, ingrese nuevamente")
+        except (Exception,Error) as e:
+            print(e)
+            break
 
 def verSaldo(usuario):
     query = "select amount from cliente where user_name = %s"
@@ -302,14 +320,55 @@ def verCarrito(usuario):
         from carrito_producto
         inner join carrito on carrito.id_carrito = carrito_producto.id_carrito
         inner join producto on carrito_producto.id_product = producto.id_product where carrito.id_user = %s"""
-        data, = select_query(query,[userId])
-        print(data)
+        data = select_query(query,[userId])
+        
+        for i in data:
+            print(f"Usted tiene {i[1]} de {i[0]} por un total de ${i[2]}")
+
     except (Exception,Error) as e:
         print(e)        
 
 
 def eliminarProductoDeCarrito(usuario):
-    print("placeholder")
+    while True:
+        try:
+            productoAEliminar = input("Ingrese el nombre del producto que quiere eliminar: ")
+
+            queryIdCliente = "select id_user from cliente where user_name = %s"
+            idCliente, = select_query(queryIdCliente,[usuario])[0]
+
+            queryProductoId = "select id_product from producto where product_name = %s"
+            idProducto, = select_query(queryProductoId,[productoAEliminar])[0]
+
+            queryProductoCost = "select cost from producto where id_product = %s"
+            costProducto, = select_query(queryProductoCost,[idProducto])[0]
+
+            queryIdCarrito = "select id_carrito from carrito where id_user = %s"
+            idCarrito, = select_query(queryIdCarrito,[idCliente])[0]
+
+            queryamountProductCarrito = "select product_amount from carrito_producto cp where cp.id_product = %s and cp.id_carrito = %s"
+            amountProductCarrito, = select_query(queryamountProductCarrito,[idProducto,idCarrito])[0]
+
+            queryExisteCarrito_producto = "select exists(select 1 from carrito_producto where id_product = %s and id_carrito = %s)"
+            dataCarrito_producto, = select_query(queryExisteCarrito_producto,[idProducto,idCarrito])[0]
+
+            if not dataCarrito_producto:
+                print("Usted no tiene ese producto en su carrito, ingrese uno valido")
+            else:
+                #hay que borrar el producto de carrito_producto y descontar el dinero del total del carrito y actualizar el stock en producto
+                queryStockProducto = "update producto set stock = stock+%s where id_product = %s"
+                update_query(queryStockProducto,(amountProductCarrito,idProducto))#suma el stock al producto
+
+                query = "delete from carrito_producto cp where cp.id_product = %s and cp.id_carrito = %s"
+                update_query(query,(idProducto,idCarrito))#borra la fila del producto en carrito_producto
+
+                queryValorCarrito = "update carrito set total_price = total_price-%s*%s where id_carrito = %s and id_user = %s"
+                update_query(queryValorCarrito,(costProducto,amountProductCarrito,idCarrito,idCliente))#resta del total del carrito el producto eliminado
+
+                print("Producto eliminado exitosamente")
+                break
+        except (Exception,Error) as e:
+            print(e)     
 
 def pagarCarrito(usuario):
     print("placeholder")
